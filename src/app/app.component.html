@@ -1,0 +1,46 @@
+<div class="container" *ngIf="(data|async) as _data">
+    <strong>restheart @ https://demo.restheart.org/messages</strong>
+    
+    <table class="table table-striped table-sm table-hover mt-4">
+      <thead class="thead-inverse">
+        <tr>
+          <th>{{(size|async)?._size}} messages</th>
+          <th>from</th>
+          <th>message</th>
+          <th>raw data</th>
+        </tr>
+      </thead>
+      <tbody >
+        <tr>
+          <td><button type="button" class="btn btn-primary btn-sm" (click)="postMessage()">Post message</button></td>
+          <td><input [(ngModel)]="newMessage.from"></td>
+          <td><input [(ngModel)]="newMessage.message"></td>
+          <td class="small">{{newMessage|json}}</td>
+        </tr>
+        
+        <tr *ngFor="let doc of _data; let idx = index;">
+          <th scope="row">{{(idx+1)+(page-1)*5}}</th>
+          <td *ngIf="doc.message else missingField">{{doc.from}}</td>
+          <td *ngIf="doc.message else missingField">{{doc.message}}</td>
+          <ng-template #missingField>
+            <td class="table-danger">missing field</td>
+          </ng-template>
+          <td class="small">{{doc|json}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <nav>
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="page<2">
+          <a class="page-link" href="#" tabindex="-1" (click)="pageDown()">Previous</a>
+        </li>
+        <li class="page-item active">
+          <a class="page-link" href="#">{{page}} <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="page-item" [class.disabled]="page*5>=_data._size">
+          <a class="page-link" href="#" (click)="pageUp()">Next</a>
+        </li>
+      </ul>
+    </nav>
+    
+  </div>
