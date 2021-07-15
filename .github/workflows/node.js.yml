@@ -1,7 +1,7 @@
 # This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Node.js CI
+name: Build and Deploy master
 
 on:
   push:
@@ -20,13 +20,13 @@ jobs:
           node-version: 12.x
           cache: "npm"
 
-      - name: Build angular app
+      - name: Build dist
         run: |
           yarn install
           yarn build --configuration=production
 
-      - name: Deploy to S3 bucket
-        uses: jakejarvis/s3-sync-action@master
+      - name: Sync S3 bucket
+        uses: jakejarvis/s3-sync-action@v0.5.1
         with:
           args: --acl public-read --follow-symlinks --delete
         env:
@@ -36,8 +36,8 @@ jobs:
           AWS_REGION: "eu-south-1"
           SOURCE_DIR: "dist/demo"
 
-      - name: invalidate
-        uses: chetan/invalidate-cloudfront-action@master
+      - name: Invalidate Cloudfront
+        uses: chetan/invalidate-cloudfront-action@v1.3
         env:
           DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
           PATHS: "/*"
