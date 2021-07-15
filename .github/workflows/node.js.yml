@@ -15,12 +15,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Build angular app
-        uses: actions/setup-node@v2
+      - uses: actions/setup-node@v2
         with:
           node-version: 12.x
           cache: "npm"
+
+      - name: Build angular app
         run: |
           yarn install
           yarn build --configuration=production
