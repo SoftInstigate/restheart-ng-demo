@@ -1,6 +1,6 @@
 # RESTHeart-ng-demo
 
-An example Angular 12 webapp that uses [RESTHeart](https://restheart.org) REST API for MongoDB.
+An example Angular 12 webapp that uses [RESTHeart](https://restheart.org), the REST API for MongoDB.
 
 This app is online at [https://ng-demo.restheart.org](https://ng-demo.restheart.org).
 
