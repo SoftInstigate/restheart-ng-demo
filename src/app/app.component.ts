@@ -2,11 +2,22 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { Service } from './service';
+import { FormsModule } from '@angular/forms';
+import { NgIf, NgFor, AsyncPipe, JsonPipe, DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'my-app',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+    selector: 'my-app',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css'],
+    standalone: true,
+    imports: [
+        NgIf,
+        FormsModule,
+        NgFor,
+        AsyncPipe,
+        JsonPipe,
+        DatePipe,
+    ],
 })
 export class AppComponent implements OnInit {
   data: Observable<Array<any>>;
