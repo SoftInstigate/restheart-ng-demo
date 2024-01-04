@@ -1,9 +1,10 @@
 <div class="container-fluid mt-3" *ngIf="data | async as _data">
     <div class="row text-center">
-    <strong>{{ (size | async)?._size }} messages posted to restheart &#64;
-      https://demo.restheart.org/messages so far...</strong>
+    @if((size | async)?._size; as size) {
+      <strong> {{size}} messages posted to restheart &#64; https://demo.restheart.org/messages so far...</strong>
+    }
+    @else { ... }
     </div>
-
     <form class="mt-2 row g-3 align-items-center mw-800 mx-auto">
       <div class="col-12">
         <label for="from">From</label>
@@ -49,37 +50,41 @@
           </tr>
       </thead>
       <tbody>
-          <tr *ngFor="let doc of _data; let idx = index">
-          <td *ngIf="doc.from; else missingField">{{ doc.from }}</td>
-          <td *ngIf="doc.message; else missingField">{{ doc.message }}</td>
-          <td *ngIf="doc.timestamp; else missingField">
-              {{ doc.timestamp.$date | date: 'short' }}
-          </td>
-          <ng-template #missingField>
-              <td class="text-danger">missing field</td>
-          </ng-template>
-          <td class="small p-1">
-              <pre>{{ doc | json }}</pre>
-          </td>
+        @for (doc of _data; track doc._id ) {
+          <tr>
+            <td *ngIf="doc.from; else missingField">{{ doc.from }}</td>
+            <td *ngIf="doc.message; else missingField">{{ doc.message }}</td>
+            <td *ngIf="doc.timestamp; else missingField">
+                {{ doc.timestamp.$date | date: 'short' }}
+            </td>
+            <ng-template #missingField>
+                <td class="text-danger">missing field</td>
+            </ng-template>
+            <td class="small p-1">
+                <pre>{{ doc | json }}</pre>
+            </td>
           </tr>
+        }
       </tbody>
       </table>
     </div>
-    <nav *ngIf="size | async as _size">
-      <ul class="pagination justify-content-center">
-        <li class="page-item" [class.disabled]="page < 2">
-          <a class="page-link" href="#" tabindex="-1" (click)="pageDown()"
-            >Previous</a
-          >
-        </li>
-        <li class="page-item active">
-          <a class="page-link" href="#"
-            >{{ page }} <span class="sr-only">(current)</span></a
-          >
-        </li>
-        <li class="page-item" [class.disabled]="page * 5 >= _size">
-          <a class="page-link" href="#" (click)="pageUp()">Next</a>
-        </li>
-      </ul>
-    </nav>
+    @if(size | async; as _size ) {
+      <nav>
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [class.disabled]="page < 2">
+            <a class="page-link" href="#" tabindex="-1" (click)="pageDown()"
+              >Previous</a
+            >
+          </li>
+          <li class="page-item active">
+            <a class="page-link" href="#"
+              >{{ page }} <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="page-item" [class.disabled]="page * 5 >= _size">
+            <a class="page-link" href="#" (click)="pageUp()">Next</a>
+          </li>
+        </ul>
+      </nav>
+    }
   </div>
