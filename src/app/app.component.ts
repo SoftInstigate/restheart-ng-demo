@@ -4,9 +4,10 @@ import { Observable, tap } from 'rxjs';
 import { Service } from './service';
 import { FormsModule } from '@angular/forms';
 import { NgIf, NgFor, AsyncPipe, JsonPipe, DatePipe } from '@angular/common';
+import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
 
 @Component({
-    selector: 'my-app',
+    selector: 'app',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
     standalone: true,
@@ -17,7 +18,9 @@ import { NgIf, NgFor, AsyncPipe, JsonPipe, DatePipe } from '@angular/common';
         AsyncPipe,
         JsonPipe,
         DatePipe,
+        HttpClientModule,
     ],
+    providers: [ Service ]
 })
 export class AppComponent implements OnInit {
   data: Observable<Array<any>>;
