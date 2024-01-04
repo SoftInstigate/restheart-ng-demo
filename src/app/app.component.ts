@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { Service } from './service';
 import { FormsModule } from '@angular/forms';
-import { NgIf, NgFor, AsyncPipe, JsonPipe, DatePipe } from '@angular/common';
+import { AsyncPipe, JsonPipe, DatePipe } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
 
 @Component({
@@ -12,14 +12,12 @@ import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http'
     styleUrls: ['./app.component.css'],
     standalone: true,
     imports: [
-        NgIf,
-        FormsModule,
-        NgFor,
-        AsyncPipe,
-        JsonPipe,
-        DatePipe,
-        HttpClientModule,
-    ],
+    FormsModule,
+    AsyncPipe,
+    JsonPipe,
+    DatePipe,
+    HttpClientModule
+],
     providers: [ Service ]
 })
 export class AppComponent implements OnInit {

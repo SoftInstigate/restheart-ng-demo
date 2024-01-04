@@ -1,96 +1,90 @@
-<div class="container-fluid mt-3" *ngIf="data | async as _data">
-  <!-- header -->
-  <div class="row text-center">
-    @if((size | async)?._size; as size) {
-      <strong> {{size}} messages posted to restheart &#64; https://demo.restheart.org/messages so far...</strong>
-    }
-    @else { ... }
-  </div>
-
-  <!-- new message form -->
-  <form class="mt-2 row g-3 align-items-center mw-800 mx-auto">
-    <div class="col-12">
-      <label for="from">From</label>
-      <input
-        name="from"
-        id="from"
-        [(ngModel)]="newMsg.from"
-        class="form-control"
-        placeholder="Your nickname"
-      />
-    </div>
-    <div class="col-12">
-      <label for="message">Message</label>
-      <textarea
-        id="message"
-        name="message"
-        [(ngModel)]="newMsg.message"
-        class="form-control"
-        placeholder="RESTHeart rocks!"
-        rows="3"
-      ></textarea>
-    </div>
-    <div class="col-4 ms-auto">
-      <button
-        type="button"
-        class="btn btn-primary form-control"
-        (click)="postMessage()"
-        [disabled]="!newMsg.message || !newMsg.from"
-      >
-        Post message
-      </button>
-    </div>
-  </form>
-
-  <!-- message table -->
-  <div class="table-responsive">
-    <table class="table table-striped table-hover mt-4">
-    <thead class="thead-inverse">
-      <tr>
-      <th>From</th>
-      <th>Message</th>
-      <th>Date</th>
-      <th>Raw document</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (doc of _data; track doc._id ) {
-        <tr>
-          <td *ngIf="doc.from; else missingField">{{ doc.from }}</td>
-          <td *ngIf="doc.message; else missingField">{{ doc.message }}</td>
-          <td *ngIf="doc.timestamp; else missingField">
-              {{ doc.timestamp.$date | date: 'short' }}
-          </td>
-          <ng-template #missingField>
-              <td class="text-danger">missing field</td>
-          </ng-template>
-          <td class="small p-1">
-              <pre>{{ doc | json }}</pre>
-          </td>
-        </tr>
+@if (data | async; as _data) {
+  <div class="container-fluid mt-3">
+    <!-- header -->
+    <div class="row text-center">
+      @if((size | async)?._size; as size) {
+        <strong> {{size}} messages posted to restheart &#64; https://demo.restheart.org/messages so far...</strong>
       }
-    </tbody>
-    </table>
-  </div>
-
-  <!-- table paging -->
-  @if(size | async; as _size ) {
-    <nav>
-      <ul class="pagination justify-content-center">
-        <li class="page-item" [class.disabled]="page < 2">
-          <a class="page-link" href="#" tabindex="-1" (click)="pageDown()"
-            >Previous</a
+      @else { ... }
+    </div>
+    <!-- new message form -->
+    <form class="mt-2 row g-3 align-items-center mw-800 mx-auto">
+      <div class="col-12">
+        <label for="from">From</label>
+        <input
+          name="from"
+          id="from"
+          [(ngModel)]="newMsg.from"
+          class="form-control"
+          placeholder="Your nickname"
+          />
+      </div>
+      <div class="col-12">
+        <label for="message">Message</label>
+        <textarea
+          id="message"
+          name="message"
+          [(ngModel)]="newMsg.message"
+          class="form-control"
+          placeholder="RESTHeart rocks!"
+          rows="3"
+        ></textarea>
+      </div>
+      <div class="col-4 ms-auto">
+        <button
+          type="button"
+          class="btn btn-primary form-control"
+          (click)="postMessage()"
+          [disabled]="!newMsg.message || !newMsg.from"
           >
-        </li>
-        <li class="page-item active">
-          <a class="page-link" href="#"
-            >{{ page }} <span class="sr-only">(current)</span></a
-          >
-        </li>
-        <li class="page-item" [class.disabled]="page * 5 >= _size">
-          <a class="page-link" href="#" (click)="pageUp()">Next</a>
-        </li>
-      </ul>
-    </nav>
-  }
-</div>
+          Post message
+        </button>
+      </div>
+    </form>
+    <!-- message table -->
+    <div class="table-responsive">
+      <table class="table table-striped table-hover mt-4">
+        <thead class="thead-inverse">
+          <tr>
+            <th>From</th>
+            <th>Message</th>
+            <th>Date</th>
+            <th>Raw document</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (doc of _data; track doc._id ) {
+            <tr>
+              @if (doc.from) { <td>{{ doc.from }}</td> } @else { <td class="text-danger">missing field</td> }
+              @if (doc.message) { <td>{{ doc.message }}</td> } @else { <td class="text-danger">missing field</td> }
+              @if (doc.timestamp) { <td>{{ doc.timestamp.$date | date: 'short' }} </td> }
+              <td class="small p-1">
+                <pre>{{ doc | json }}</pre>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <!-- table paging -->
+    @if(size | async; as _size ) {
+      <nav>
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [class.disabled]="page < 2">
+            <a class="page-link" href="#" tabindex="-1" (click)="pageDown()"
+              >Previous</a
+              >
+            </li>
+            <li class="page-item active">
+              <a class="page-link" href="#"
+                >{{ page }} <span class="sr-only">(current)</span></a
+                >
+              </li>
+              <li class="page-item" [class.disabled]="page * 5 >= _size">
+                <a class="page-link" href="#" (click)="pageUp()">Next</a>
+              </li>
+            </ul>
+          </nav>
+        }
+      </div>
+    }
